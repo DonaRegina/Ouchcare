@@ -9,7 +9,6 @@ export type AdminProduct = {
   heroImageUrl: string;
   material: string;
   isActive: boolean;
-  createdAt: string;
 };
 
 export type AdminOrder = {

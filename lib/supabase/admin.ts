@@ -5,6 +5,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { AdminOrder, AdminProduct, AdminUser } from "@/lib/types/admin";
 import type { Database } from "@/lib/supabase/database.types";
 import type { UserRole } from "@/lib/types/domain";
+import type { OrderStatus } from "@/lib/types/domain";
 
 
 export type AdminContext = {
@@ -62,8 +63,8 @@ export async function getAdminContext(): Promise<AdminContextResult> {
 export async function loadAdminProducts(client: SupabaseClient<Database>): Promise<AdminProduct[]> {
   const { data, error } = await client
     .from("products")
-    .select("id, slug, name, description, price_huf, hero_image_url, material, is_active, created_at")
-    .order("created_at", { ascending: false });
+  .select("id, slug, name, description, price_huf, hero_image_url, material, is_active")
+    .order("name", { ascending: false });
 
   if (error || !data) {
     return [];
@@ -78,7 +79,6 @@ export async function loadAdminProducts(client: SupabaseClient<Database>): Promi
     heroImageUrl: product.hero_image_url,
     material: product.material,
     isActive: product.is_active,
-    createdAt: product.created_at,
   }));
 }
 
@@ -107,8 +107,8 @@ export async function loadAdminOrders(client: SupabaseClient<Database>): Promise
       userId: order.user_id,
       userName: profile?.full_name ?? "Unknown user",
       userEmail: profile?.email ?? "Unavailable",
-      totalHuf: order.total_huf,
-      status: order.status,
+      totalHuf: order.total_huf ?? 0,
+      status: order.status as OrderStatus,
       stripeSessionId: order.stripe_session_id,
       createdAt: order.created_at,
     };

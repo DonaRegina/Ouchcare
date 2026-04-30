@@ -19,7 +19,6 @@ export type Product = {
   material: string;
   availableSizes: ProductSize[];
   isActive: boolean;
-  createdAt: string;
 };
 
 export type ProductVariant = {

@@ -55,12 +55,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            scriptProps={{ "data-cfasync": "false" }}
-          >
+          <ThemeProvider>
             {/* Global header -- single navbar for the app */}
             <header className="border-b border-[#bff1f5] bg-white/90 text-foreground shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-slate-950/85">
               <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">

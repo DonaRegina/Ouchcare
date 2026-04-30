@@ -26,7 +26,7 @@ function getWebhookSecret() {
 function getLineItemMetadata(lineItem: Stripe.LineItem): Stripe.Metadata {
   const product = lineItem.price?.product;
 
-  if (!product || typeof product === "string") {
+  if (!product || typeof product === "string" || product.deleted) {
     return {};
   }
 

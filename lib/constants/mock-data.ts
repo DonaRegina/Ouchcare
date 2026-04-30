@@ -58,7 +58,6 @@ export const MOCK_PRODUCTS: Product[] = [
     material: "Double-layer cotton",
     availableSizes: ["XS", "S", "M", "L", "XL", "CUSTOM"],
     isActive: true,
-    createdAt: "2026-01-12T10:10:00.000Z",
   },
   {
     id: "prod-cone-alt",
@@ -70,7 +69,6 @@ export const MOCK_PRODUCTS: Product[] = [
     material: "Medical mesh + neoprene",
     availableSizes: ["XS", "S", "M", "L", "CUSTOM"],
     isActive: true,
-    createdAt: "2026-01-18T10:10:00.000Z",
   },
   {
     id: "prod-leg-guard",
@@ -82,7 +80,6 @@ export const MOCK_PRODUCTS: Product[] = [
     material: "Stretch knit with antimicrobial lining",
     availableSizes: ["S", "M", "L", "XL", "CUSTOM"],
     isActive: true,
-    createdAt: "2026-02-02T10:10:00.000Z",
   },
 ];
 

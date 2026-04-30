@@ -55,7 +55,7 @@ export async function GET() {
         productId: item.product_id,
         productName: productNameById.get(item.product_id) ?? "Product",
         quantity: item.quantity,
-        unitPriceHuf: item.unit_price_huf,
+        unitPriceHuf: item.unit_price_huf ?? 0,
       });
       itemsByOrder.set(item.order_id, current);
     }

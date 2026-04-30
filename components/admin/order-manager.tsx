@@ -17,7 +17,7 @@ const orderStatuses: OrderStatus[] = ["pending", "paid", "processing", "shipped"
 
 const emptyForm: OrderFormValues = {
   userId: "",
-  totalCents: 0,
+  totalHuf: 0,
   status: "pending",
   stripeSessionId: "",
 };
@@ -37,7 +37,7 @@ export function OrderManager({ orders, users }: OrderManagerProps) {
     if (editingOrder) {
       setForm({
         userId: editingOrder.userId,
-        totalCents: editingOrder.totalHuf,
+        totalHuf: editingOrder.totalHuf,
         status: editingOrder.status,
         stripeSessionId: editingOrder.stripeSessionId ?? "",
       });
@@ -135,9 +135,9 @@ export function OrderManager({ orders, users }: OrderManagerProps) {
                 id="order-total"
                 type="number"
                 min="0"
-                value={form.totalCents}
+                value={form.totalHuf}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, totalCents: Number(event.target.value) || 0 }))
+                  setForm((current) => ({ ...current, totalHuf: Number(event.target.value) || 0 }))
                 }
                 required
               />

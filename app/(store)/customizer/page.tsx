@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,7 +53,7 @@ function recommendSizeFromChest(chest: number) {
   return "XXL";
 }
 
-export default function CustomizerPage() {
+function CustomizerForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const measurementId = searchParams?.get("measurement_id") ?? null;
@@ -93,13 +93,11 @@ export default function CustomizerPage() {
         setUserPresent(true);
 
         if (!measurementId) {
-          // no measurement id provided; nothing to fetch
           setLoading(false);
           setSessionChecked(true);
           return;
         }
 
-        // Try fetching measurement by id, then by created_at if not found
         let measurementRes = await supabase
           .from("measurements")
           .select(
@@ -126,7 +124,6 @@ export default function CustomizerPage() {
           setMeasurement(null);
         }
 
-        // Find Recovery Vest product dynamically. Prefer slug 'recover-suit', fallback to name match.
         let productRes = await supabase
           .from("products")
           .select("id, name")
@@ -148,7 +145,6 @@ export default function CustomizerPage() {
         } else if (productRes.data) {
           setProduct(productRes.data as Product);
 
-          // fetch variants for product
           const { data: vdata, error: verr } = await supabase
             .from("product_variants")
             .select("id, size, material, price_huf")
@@ -165,7 +161,6 @@ export default function CustomizerPage() {
             const uniqMaterials = Array.from(
               new Set(fetched.map((v) => v.material)),
             );
-            // Prefer "Full Cotton" if present
             uniqMaterials.sort((a, b) =>
               a === "Full Cotton"
                 ? -1
@@ -200,14 +195,12 @@ export default function CustomizerPage() {
     };
   }, [measurementId, router]);
 
-  // when measurement arrives, preselect size based on chest
   useEffect(() => {
     if (!measurement) return;
     const rec = recommendSizeFromChest(measurement.chest);
     setSelectedSize(rec);
   }, [measurement]);
 
-  // make sure selected size is supported by selected material; if not, pick first supported
   useEffect(() => {
     if (!variants.length || !selectedMaterial) return;
 
@@ -215,11 +208,9 @@ export default function CustomizerPage() {
       variants.some((v) => v.material === selectedMaterial && v.size === s),
     );
     if (supportedSizes.length === 0) {
-      // nothing supported: keep selectedSize as-is
       return;
     }
     if (!supportedSizes.includes(selectedSize)) {
-      // try to pick the recommended or fallback to the first supported
       const recommended = recommendSizeFromChest(measurement?.chest ?? 0);
       setSelectedSize(
         supportedSizes.includes(recommended) ? recommended : supportedSizes[0],
@@ -260,7 +251,7 @@ export default function CustomizerPage() {
   }
 
   if (!userPresent) {
-    return null; // redirected to login already
+    return null;
   }
 
   return (
@@ -382,7 +373,6 @@ export default function CustomizerPage() {
               className="w-full"
               onClick={() => {
                 if (!product || !selectedVariant || !measurement) {
-                  // simple client-side validation / feedback
                   return;
                 }
 
@@ -447,5 +437,18 @@ export default function CustomizerPage() {
         </Card>
       </div>
     </section>
+  );
+}
+
+export default function CustomizerPage() {
+  return (
+    <Suspense fallback={
+      <section className="space-y-6">
+        <h1 className="text-3xl font-semibold tracking-tight">Customize Recovery Vest</h1>
+        <div className="text-muted-foreground rounded-md border border-dashed p-6 text-sm">Loading...</div>
+      </section>
+    }>
+      <CustomizerForm />
+    </Suspense>
   );
 }

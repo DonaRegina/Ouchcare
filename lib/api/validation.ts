@@ -24,6 +24,9 @@ export const publicProductCreateSchema = z.object({
     .min(1, "Slug is required.")
     .max(120, "Slug is too long.")
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must use lowercase letters, numbers, and hyphens only."),
+
+
+    
   name: z.string().trim().min(1, "Name is required.").max(120, "Name is too long."),
   description: z.string().trim().min(1, "Description is required.").max(2000, "Description is too long."),
   basePriceHuf: z.coerce.number().int().min(0, "Price cannot be negative.").max(1000000, "Price is too high."),
@@ -31,22 +34,28 @@ export const publicProductCreateSchema = z.object({
   heroImageUrl: z.string().trim().min(1, "Hero image URL is required.").max(500, "Hero image URL is too long."),
 });
 
-export const adminProductUpsertSchema = z
-  .object({
-    id: z.string().trim().min(1).optional(),
-    slug: z.string().trim().min(1).max(120).optional(),
-    name: z.string().trim().min(1).max(120).optional(),
-    description: z.string().trim().min(1).max(2000).optional(),
-    basePriceHuf: z.coerce.number().int().min(0).max(1000000).optional(),
-    heroImageUrl: z.string().trim().min(1).max(500).optional(),
-    material: z.string().trim().min(1).max(120).optional(),
-    isActive: z.coerce.boolean().optional(),
-  })
-  .refine((value) => Object.keys(value).length > 0, "At least one product field is required.");
+const adminProductUpsertShape = z.object({
+  id: z.string().trim().min(1).optional(),
+  slug: z.string().trim().min(1).max(120).optional(),
+  name: z.string().trim().min(1).max(120).optional(),
+  description: z.string().trim().min(1).max(2000).optional(),
+  basePriceHuf: z.coerce.number().int().min(0).max(1000000).optional(),
+  heroImageUrl: z.string().trim().min(1).max(500).optional(),
+  material: z.string().trim().min(1).max(120).optional(),
+  isActive: z.coerce.boolean().optional(),
+});
 
-export const adminProductUpdateSchema = adminProductUpsertSchema
-  .safeExtend({ id: z.string().trim().min(1, "Product id is required.") })
-  .refine((value) => Object.keys(value).some((key) => key !== "id"), "At least one product field is required.");
+export const adminProductUpsertSchema = adminProductUpsertShape.refine(
+  (value) => Object.keys(value).length > 0,
+  "At least one product field is required.",
+);
+
+export const adminProductUpdateSchema = adminProductUpsertShape
+  .extend({ id: z.string().trim().min(1, "Product id is required.") })
+  .refine(
+    (value) => Object.keys(value).some((key) => key !== "id"),
+    "At least one product field is required.",
+  );
 
 export const adminProductCreateSchema = publicProductCreateSchema.extend({
   isActive: z.coerce.boolean().optional(),
@@ -92,7 +101,7 @@ export const checkoutItemSchema = z.object({
   unitPriceHuf: z.coerce.number().int().min(0),
   size: z.string().trim().min(1),
   imageUrl: z.string().trim().optional(),
-  measurements: z.record(z.unknown()).optional(),
+  measurements: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const checkoutPayloadSchema = z.object({

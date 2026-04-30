@@ -22,10 +22,10 @@ function sortSizes(a: ProductSize, b: ProductSize) {
 export async function loadStorefrontProducts(client: SupabaseClient<Database>, options: LoadProductsOptions = {}): Promise<Product[]> {
   let query = client
     .from("products")
-    .select("id, slug, name, description, price_huf, hero_image_url, material, is_active, created_at")
+    .select("id, slug, name, description, price_huf, hero_image_url, material, is_active")
     .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(options.limit ?? 50);
+    .order("name", { ascending: true })
+
 
   if (options.slug) {
     query = query.eq("slug", options.slug);
@@ -72,6 +72,5 @@ export async function loadStorefrontProducts(client: SupabaseClient<Database>, o
     material: row.material,
     availableSizes: sizesByProduct.get(row.id) ?? ["CUSTOM"],
     isActive: row.is_active,
-    createdAt: row.created_at,
   }));
 }

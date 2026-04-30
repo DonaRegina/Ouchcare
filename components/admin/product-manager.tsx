@@ -16,7 +16,7 @@ const emptyForm: ProductFormValues = {
   slug: "",
   name: "",
   description: "",
-  basePriceCents: 0,
+  basePriceHuf: 0,
   heroImageUrl: "",
   material: "",
   isActive: true,
@@ -38,7 +38,7 @@ export function ProductManager({ products }: ProductManagerProps) {
         slug: editingProduct.slug,
         name: editingProduct.name,
         description: editingProduct.description,
-        basePriceCents: editingProduct.basePriceHuf,
+        basePriceHuf: editingProduct.basePriceHuf,
         heroImageUrl: editingProduct.heroImageUrl,
         material: editingProduct.material,
         isActive: editingProduct.isActive,
@@ -148,9 +148,9 @@ export function ProductManager({ products }: ProductManagerProps) {
                 id="product-price"
                 type="number"
                 min="0"
-                value={form.basePriceCents}
+                value={form.basePriceHuf}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, basePriceCents: Number(event.target.value) || 0 }))
+                  setForm((current) => ({ ...current, basePriceHuf: Number(event.target.value) || 0 }))
                 }
                 required
               />
