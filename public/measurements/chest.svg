@@ -1,0 +1,6 @@
+<svg width="640" height="360" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chest measurement guide">
+  <rect width="640" height="360" fill="#eefcf7"/>
+  <ellipse cx="320" cy="170" rx="190" ry="120" fill="#d1fae5" stroke="#059669" stroke-width="4"/>
+  <path d="M160 200 C240 140, 400 140, 480 200" fill="none" stroke="#ea580c" stroke-width="10" stroke-linecap="round"/>
+  <text x="320" y="315" text-anchor="middle" font-family="Arial" font-size="24" fill="#14532d">Wrap around widest chest point</text>
+</svg>

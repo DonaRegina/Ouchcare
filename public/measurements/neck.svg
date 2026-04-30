@@ -1,0 +1,8 @@
+<svg width="640" height="360" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Neck measurement guide">
+  <rect width="640" height="360" fill="#fff8ed"/>
+  <ellipse cx="320" cy="180" rx="170" ry="110" fill="#fde8cc" stroke="#d97706" stroke-width="4"/>
+  <circle cx="260" cy="150" r="10" fill="#d97706"/>
+  <circle cx="380" cy="150" r="10" fill="#d97706"/>
+  <path d="M230 190 C260 140, 380 140, 410 190" fill="none" stroke="#0f766e" stroke-width="10" stroke-linecap="round"/>
+  <text x="320" y="315" text-anchor="middle" font-family="Arial" font-size="24" fill="#7c2d12">Measure where the collar sits</text>
+</svg>
