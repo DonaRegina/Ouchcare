@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import type { Database } from "@/lib/types/database";
+import type { Database } from "@/lib/supabase/database.types";
 import type { VetArticle } from "@/lib/types/domain";
 
 type LoadVetArticlesOptions = {

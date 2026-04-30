@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import type { Database } from "@/lib/supabase/database.types";
 
 import { getAllowedRedirectPath, getResolvedUserRole, getRoleLandingPath, getProtectedPathRoles, isProtectedPath } from "@/lib/supabase/auth";
-import type { Database } from "@/lib/types/database";
 
 export async function updateSession(request: NextRequest) {
   const response = NextResponse.next({ request });

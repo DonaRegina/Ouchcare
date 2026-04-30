@@ -91,7 +91,12 @@ export async function POST(request: Request) {
     if (!profile) {
       const { error: profileCreateError } = await supabase
         .from("profiles")
-        .insert({ id: user.id, email: user.email || "", role: "customer" });
+        .insert({
+          id: user.id,
+          email: user.email || "",
+          full_name: user.user_metadata?.full_name || user.email || "",
+          role: "customer",
+        });
 
       if (profileCreateError) {
         return NextResponse.json(

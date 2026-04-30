@@ -29,6 +29,7 @@ export async function POST(request: Request) {
 
   const { error } = await context.client.from("orders").insert({
     user_id: payload.data.userId,
+    total: payload.data.totalHuf,
     total_huf: payload.data.totalHuf,
     status: payload.data.status ?? "pending",
     stripe_session_id: payload.data.stripeSessionId ?? null,
@@ -58,6 +59,7 @@ export async function PATCH(request: Request) {
 
   if (payload.data.userId !== undefined) update.user_id = payload.data.userId;
   if (payload.data.totalHuf !== undefined) {
+    update.total = payload.data.totalHuf;
     update.total_huf = payload.data.totalHuf;
   }
   if (payload.data.status !== undefined) update.status = payload.data.status;

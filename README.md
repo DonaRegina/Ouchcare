@@ -42,16 +42,22 @@ Production-focused scaffold for a pet post-operative clothing store built with:
 npm install
 ```
 
-2. Create environment variables from the template.
+- if this throws an "ECONNRESET" error, try 
 
 ```bash
-cp .env.example .env.local
+npm install --prefer-offline
+```
+
+2. install the database 
+
+```bash
+npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/supabase/database.types.ts
 ```
 
 3. Start development server.
 
 ```bash
-npm run dev
+npm run build
 ```
 
 4. Open `http://localhost:3000`.

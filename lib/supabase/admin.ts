@@ -3,8 +3,9 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getResolvedUserRole } from "@/lib/supabase/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { AdminOrder, AdminProduct, AdminUser } from "@/lib/types/admin";
-import type { Database } from "@/lib/types/database";
+import type { Database } from "@/lib/supabase/database.types";
 import type { UserRole } from "@/lib/types/domain";
+
 
 export type AdminContext = {
   userId: string;

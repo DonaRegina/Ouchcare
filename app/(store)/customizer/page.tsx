@@ -29,14 +29,16 @@ type Product = {
 };
 
 type MeasurementRow = {
-  id?: string;
-  user_id?: string;
-  pet_name?: string | null;
-  neck_cm: number;
-  chest_cm: number;
-  back_length_cm: number;
-  leg_girth_cm: number;
-  created_at?: string;
+  id: string;
+  user_id: string;
+  pet_name: string;
+  neck: number;
+  chest: number;
+  back_length: number;
+  leg_girth: number;
+  created_at: string;
+  breed: string | null;
+  photo_url: string | null;
 };
 
 const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
@@ -201,7 +203,7 @@ export default function CustomizerPage() {
   // when measurement arrives, preselect size based on chest
   useEffect(() => {
     if (!measurement) return;
-    const rec = recommendSizeFromChest(measurement.chest_cm);
+    const rec = recommendSizeFromChest(measurement.chest);
     setSelectedSize(rec);
   }, [measurement]);
 
@@ -218,7 +220,7 @@ export default function CustomizerPage() {
     }
     if (!supportedSizes.includes(selectedSize)) {
       // try to pick the recommended or fallback to the first supported
-      const recommended = recommendSizeFromChest(measurement?.chest_cm ?? 0);
+      const recommended = recommendSizeFromChest(measurement?.chest ?? 0);
       setSelectedSize(
         supportedSizes.includes(recommended) ? recommended : supportedSizes[0],
       );
@@ -393,10 +395,10 @@ export default function CustomizerPage() {
                   measurement_id:
                     measurement.id ?? measurement.created_at ?? null,
                   custom_size: {
-                    neck: measurement.neck_cm,
-                    chest: measurement.chest_cm,
-                    back_length: measurement.back_length_cm,
-                    leg_girth: measurement.leg_girth_cm,
+                    neck: measurement.neck,
+                    chest: measurement.chest,
+                    back_length: measurement.back_length,
+                    leg_girth: measurement.leg_girth,
                   },
                 } as any);
 

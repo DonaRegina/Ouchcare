@@ -1,7 +1,8 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
-import type { Database } from "@/lib/types/database";
+import type { Database } from "@/lib/supabase/database.types";
 import type { UserRole } from "@/lib/types/domain";
+
 
 const fallbackRole: UserRole = "customer";
 
