@@ -210,20 +210,23 @@ export default async function CustomerDashboardPage() {
 
           {/* Measurements section */}
           <Card className="flex flex-col border-[#dff8fb] bg-white/90 dark:border-[#1c7f90] dark:bg-[#0e414a]">
-            <CardHeader className="flex items-start justify-between gap-4">
-              <div>
-                <CardTitle className="text-[#239fb1]">Measurements</CardTitle>
-                <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
-                  Your saved pet measurements
-                </p>
-              </div>
-              <Link
-                href="/my-measurements"
-                className="text-sm text-slate-500 hover:underline"
-              >
-                View all
-              </Link>
-            </CardHeader>
+              <CardHeader className="flex flex-row items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="text-[#239fb1]">Measurements</CardTitle>
+                  <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
+                    Your saved pet measurements
+                  </p>
+                </div>
+
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 border-[#9be8f0] text-slate-700 hover:bg-[#ecfeff] dark:border-[#1c7f90] dark:text-[#dff8fb] dark:hover:bg-[#14515c]"
+                >
+                  <Link href="/my-measurements">View all</Link>
+                </Button>
+              </CardHeader>
             <CardContent className="flex-1 space-y-4">
               {measurements.length > 0 ? (
                 <div className="grid gap-3">
@@ -262,7 +265,7 @@ export default async function CustomerDashboardPage() {
                   <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
                     You don't have any saved measurements yet.
                   </p>
-                  <Button asChild variant="outline" className="w-full">
+                  <Button asChild variant="outline" className="flex-1 space-y-4">
                     <Link href="/measurement-wizard">
                       Open measurement wizard
                     </Link>
