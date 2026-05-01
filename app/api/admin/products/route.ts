@@ -57,6 +57,53 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
+  // Handle adding a new variant
+  if (body.addVariant === true) {
+    const productId = String(body.productId ?? "").trim();
+    const size = String(body.size ?? "").trim();
+    const material = String(body.material ?? "Full Cotton").trim();
+    const priceHuf = Number(body.priceHuf) || 0;
+    const stock = Math.max(0, Math.round(Number(body.stock) || 0));
+
+    if (!productId || !size) {
+      return NextResponse.json({ error: "Product ID and size are required" }, { status: 400 });
+    }
+
+    // product_variants has: material, price_huf, additional_price_cents, stock
+    const { error } = await context.client.from("product_variants").insert(
+      {
+        product_id: productId,
+        size,
+        material,
+        price_huf: priceHuf,
+        stock,
+      } as never,
+    );
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ ok: true });
+  }
+
+  // Handle deleting a variant
+  if (body.deleteVariant === true) {
+    const variantId = String(body.variantId ?? "").trim();
+
+    if (!variantId) {
+      return NextResponse.json({ error: "Variant ID is required" }, { status: 400 });
+    }
+
+    const { error } = await context.client.from("product_variants").delete().eq("id", variantId);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ ok: true });
+  }
+
   // Handle variant stock update
   if (typeof body.variantId === "string" && typeof body.stock === "number") {
     const { error } = await context.client

@@ -63,36 +63,16 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <StatCard
-          title="Active products"
-          value={String(overview.stats.activeProducts)}
-          description={`${overview.stats.totalProducts} total in catalog.`}
-        />
-        <StatCard
-          title="Paid orders"
-          value={String(overview.stats.paidOrders)}
-          description={`${overview.stats.totalOrders} total orders.`}
-        />
-        <StatCard
-          title="Custom orders"
-          value={String(overview.stats.customOrders)}
-          description="Orders with custom sizing."
-        />
-        <StatCard
-          title="Veterinarians"
-          value={String(overview.stats.vetUsers)}
-          description={`${overview.stats.adminUsers} admin accounts.`}
-        />
-        <StatCard
-          title="Profiles"
-          value={String(overview.users.length)}
-          description="Total managed accounts."
-        />
+        <StatCard title="Active products" value={String(overview.stats.activeProducts)} description={`${overview.stats.totalProducts} total in catalog.`} />
+        <StatCard title="Paid orders" value={String(overview.stats.paidOrders)} description={`${overview.stats.totalOrders} total orders.`} />
+        <StatCard title="Custom orders" value={String(overview.stats.customOrders)} description="Orders with custom sizing." />
+        <StatCard title="Veterinarians" value={String(overview.stats.vetUsers)} description={`${overview.stats.adminUsers} admin accounts.`} />
+        <StatCard title="Profiles" value={String(overview.users.length)} description="Total managed accounts." />
       </section>
 
       <CustomQueue orders={overview.orders} />
       <InventoryPanel variants={overview.variants} />
-      <ProductManager products={overview.products} />
+      <ProductManager products={overview.products} variants={overview.variants} />
       <OrderManager orders={overview.orders} users={overview.users} />
       <UserManager users={overview.users} />
       <VetArticleManager articles={vetArticles} />

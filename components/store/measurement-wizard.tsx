@@ -799,7 +799,7 @@ export function MeasurementWizard() {
                 <Link
                   href={
                     firstProductId && savedMeasurementId
-                      ? `/products/${firstProductId}?measurement_id=${savedMeasurementId}`
+                      ? `/customizer?measurement_id=${savedMeasurementId}`
                       : "/shop"
                   }
                 >

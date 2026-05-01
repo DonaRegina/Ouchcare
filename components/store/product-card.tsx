@@ -20,7 +20,7 @@ type Variant = {
   price_huf: number;
 };
 type ProductProp = { id: string; name: string; variants: Variant[] };
-const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
+const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "CUSTOM"];
 
 export default function ProductCard({ product }: { product: ProductProp }) {
   const router = useRouter();
@@ -33,9 +33,20 @@ export default function ProductCard({ product }: { product: ProductProp }) {
     );
   }, [product.variants]);
 
+  // All unique sizes across all variants, ordered
+  const allSizes = useMemo(() => {
+    const unique = Array.from(new Set(product.variants.map((v) => v.size)));
+    return SIZE_ORDER.filter((s) => unique.includes(s));
+  }, [product.variants]);
+
   const sizesForMaterial = (mat: string) =>
     SIZE_ORDER.filter((s) =>
       product.variants.some((v) => v.material === mat && v.size === s),
+    );
+
+  const materialsForSize = (sz: string) =>
+    materials.filter((m) =>
+      product.variants.some((v) => v.material === m && v.size === sz),
     );
 
   const defaultMaterial = materials.includes("Full Cotton")
@@ -44,14 +55,23 @@ export default function ProductCard({ product }: { product: ProductProp }) {
   const [material, setMaterial] = useState(defaultMaterial);
   const [size, setSize] = useState(() => {
     const avail = sizesForMaterial(defaultMaterial);
-    return avail.includes("S") ? "S" : (avail[0] ?? "");
+    return avail.includes("M") ? "M" : avail.includes("S") ? "S" : (avail[0] ?? "");
   });
 
+  // When material changes, reset size if unavailable
   useEffect(() => {
     const avail = sizesForMaterial(material);
     if (!avail.includes(size))
-      setSize(avail.includes("S") ? "S" : (avail[0] ?? ""));
+      setSize(avail.includes("M") ? "M" : avail.includes("S") ? "S" : (avail[0] ?? ""));
   }, [material]);
+
+  // When size changes, reset material if unavailable
+  useEffect(() => {
+    const avail = materialsForSize(size);
+    if (avail.length > 0 && !avail.includes(material)) {
+      setMaterial(avail[0]);
+    }
+  }, [size]);
 
   const selectedVariant = product.variants.find(
     (v) => v.material === material && v.size === size,
@@ -60,12 +80,25 @@ export default function ProductCard({ product }: { product: ProductProp }) {
     ? CURRENCY.format(selectedVariant.price_huf)
     : "—";
   const sizeOptions = sizesForMaterial(material);
+  const hasVariants = product.variants.length > 0;
+
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+    addItem({
+      id: `${product.id}-${selectedVariant.id}`,
+      name: `${product.name} (${size})`,
+      unitPriceHuf: selectedVariant.price_huf,
+      quantity: 1,
+      variant_id: selectedVariant.id,
+    } as never);
+    import("sonner").then(({ toast }) => toast.success("Added to cart!"));
+  };
 
   const handleBuyNow = () => {
     if (!selectedVariant) return;
     addItem({
-      id: product.id,
-      name: product.name,
+      id: `${product.id}-${selectedVariant.id}`,
+      name: `${product.name} (${size})`,
       unitPriceHuf: selectedVariant.price_huf,
       quantity: 1,
       variant_id: selectedVariant.id,
@@ -73,23 +106,61 @@ export default function ProductCard({ product }: { product: ProductProp }) {
     router.push("/checkout");
   };
 
+  if (!hasVariants) {
+    return (
+      <div className="w-full text-center py-3">
+        <p className="text-sm text-muted-foreground">Coming soon — sizes not yet available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full grid gap-3">
+      {/* Size selector */}
       <div>
-        <label className="text-sm font-medium block mb-1 text-[#166674] dark:text-[#96e7ee]">Material</label>
-        <Select value={material} onValueChange={setMaterial}>
-          <SelectTrigger className="w-full border-[#bff1f5] dark:border-[#1c7f90]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {materials.map((m) => (
-              <SelectItem key={m} value={m}>
-                {m}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <label className="text-sm font-medium block mb-1 text-[#166674] dark:text-[#96e7ee]">Size</label>
+        <div className="flex flex-wrap gap-1.5">
+          {allSizes.map((s) => {
+            const available = sizeOptions.includes(s);
+            const active = s === size;
+            return (
+              <button
+                key={s}
+                type="button"
+                disabled={!available}
+                onClick={() => setSize(s)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                  active
+                    ? "border-[#239fb1] bg-[#239fb1] text-white"
+                    : available
+                      ? "border-[#bff1f5] bg-white text-[#166674] hover:bg-[#effcfe] dark:border-[#1c7f90] dark:bg-[#0e414a] dark:text-[#96e7ee] dark:hover:bg-[#12525d]"
+                      : "border-transparent bg-muted/50 text-muted-foreground/40 cursor-not-allowed"
+                }`}
+              >
+                {s}
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      {/* Material selector — only show if multiple materials exist */}
+      {materials.length > 1 && (
+        <div>
+          <label className="text-sm font-medium block mb-1 text-[#166674] dark:text-[#96e7ee]">Material</label>
+          <Select value={material} onValueChange={setMaterial}>
+            <SelectTrigger className="w-full border-[#bff1f5] dark:border-[#1c7f90]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {materials.map((m) => (
+                <SelectItem key={m} value={m}>{m}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       <div>
         <div className="text-xs text-[#1c7f90] dark:text-[#96e7ee]/70">Price</div>
         <div className="text-lg font-semibold text-[#0e414a] dark:text-[#dff8fb]">{priceDisplay}</div>
@@ -99,24 +170,11 @@ export default function ProductCard({ product }: { product: ProductProp }) {
         <Button
           variant="outline"
           className="flex-1 border-[#239fb1] text-[#239fb1] hover:bg-[#effcfe] hover:text-[#166674] dark:border-[#37bfd0] dark:text-[#37bfd0] dark:hover:bg-[#12525d]"
-          onClick={() => {
-            if (!selectedVariant) return;
-            addItem({
-              id: product.id,
-              name: product.name,
-              unitPriceHuf: selectedVariant.price_huf,
-              quantity: 1,
-              variant_id: selectedVariant.id,
-            } as never);
-            import("sonner").then(({ toast }) =>
-              toast.success("Added to cart!"),
-            );
-          }}
+          onClick={handleAddToCart}
           disabled={!selectedVariant}
         >
           Add to Cart
         </Button>
-
         <Button
           onClick={handleBuyNow}
           disabled={!selectedVariant}
