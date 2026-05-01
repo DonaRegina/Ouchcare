@@ -297,8 +297,9 @@ function getBreedSuggestion(species: string, breed: string) {
   };
 }
 
-export function MeasurementWizard() {
+export function MeasurementWizard({ editId }: { editId?: string | null }) {
   const router = useRouter();
+  const isEditMode = Boolean(editId);
   const [intro, setIntro] = useState<IntroStepValue>(initialIntro);
   const [measurementInputs, setMeasurementInputs] = useState<
     Record<MeasurementKey, string>
@@ -386,7 +387,12 @@ export function MeasurementWizard() {
 
     async function loadMeasurements() {
       try {
-        const response = await fetch("/api/measurements", {
+        // In edit mode, fetch the specific measurement; otherwise fetch the latest
+        const url = editId
+          ? `/api/measurements?id=${encodeURIComponent(editId)}`
+          : "/api/measurements";
+
+        const response = await fetch(url, {
           cache: "no-store",
         });
 
@@ -408,6 +414,16 @@ export function MeasurementWizard() {
         }
 
         const loaded = data.measurement;
+
+        // Pre-fill intro fields when editing
+        if (editId) {
+          setIntro({
+            petName: (loaded as Record<string, unknown>).petName as string ?? "",
+            breed: "",
+            species: "Dog",
+          });
+        }
+
         setMeasurementInputs({
           neckCm: toOneDecimal(loaded.neckCm).toFixed(1),
           chestCm: toOneDecimal(loaded.chestCm).toFixed(1),
@@ -415,7 +431,11 @@ export function MeasurementWizard() {
           legGirthCm: toOneDecimal(loaded.legGirthCm).toFixed(1),
         });
         setSavedMeasurementId(loaded.id ?? null);
-        setSavedAt(loaded.createdAt ?? null);
+
+        // In edit mode, don't mark as "already saved" — let user re-save
+        if (!editId) {
+          setSavedAt(loaded.createdAt ?? null);
+        }
       } catch (requestError) {
         const message =
           requestError instanceof Error
@@ -434,7 +454,7 @@ export function MeasurementWizard() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [editId]);
 
   useEffect(() => {
     if (!photoFile) {
@@ -546,12 +566,14 @@ export function MeasurementWizard() {
     setIsSaving(true);
 
     try {
+      const isUpdate = isEditMode && savedMeasurementId;
       const response = await fetch("/api/measurements", {
-        method: "POST",
+        method: isUpdate ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          ...(isUpdate ? { id: savedMeasurementId } : {}),
           petName: intro.petName,
           breed: intro.breed,
           neckCm: toOneDecimal(Number(measurements.neckCm)),
@@ -581,7 +603,9 @@ export function MeasurementWizard() {
       setSavedMeasurementId(savedMeasurementIdFromInsert);
       setSavedAt(data?.measurement?.createdAt ?? null);
       toast.success(
-        `${intro.petName || "Your pet"}'s measurements were saved.`,
+        isEditMode
+          ? `${intro.petName || "Your pet"}'s measurements were updated.`
+          : `${intro.petName || "Your pet"}'s measurements were saved.`,
       );
     } catch (requestError) {
       const message =

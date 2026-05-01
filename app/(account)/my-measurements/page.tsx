@@ -100,12 +100,21 @@ export default async function MyMeasurementsPage() {
                     </div>
                   </div>
                 </CardContent>
-                <div className="px-6 pb-6 pt-4 border-t">
+                <div className="px-6 pb-6 pt-4 border-t flex gap-2">
+                  <Link
+                    href={`/measurement-wizard?edit=${measurement.id}`}
+                    className="flex-1"
+                  >
+                    <Button className="w-full" variant="outline">
+                      Edit
+                    </Button>
+                  </Link>
                   <Link
                     href={{
                       pathname: "/customizer",
                       query: { measurement_id: measurement.id },
                     }}
+                    className="flex-1"
                   >
                     <Button className="w-full" variant="default">
                       Customize Vest

@@ -250,12 +250,24 @@ export default async function CustomerDashboardPage() {
                           </p>
                           <p className="text-xs text-slate-500 dark:text-[#96e7ee]/60">{date}</p>
                         </div>
-                        <form action={deleteMeasurementAction}>
-                          <input type="hidden" name="id" value={m.id} />
-                          <Button variant="destructive" size="sm" type="submit">
-                            Delete
+                        <div className="flex items-center gap-2">
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="sm"
+                            className="border-[#9be8f0] text-slate-700 hover:bg-[#ecfeff] dark:border-[#1c7f90] dark:text-[#dff8fb] dark:hover:bg-[#14515c]"
+                          >
+                            <Link href={`/measurement-wizard?edit=${m.id}`}>
+                              Edit
+                            </Link>
                           </Button>
-                        </form>
+                          <form action={deleteMeasurementAction}>
+                            <input type="hidden" name="id" value={m.id} />
+                            <Button variant="destructive" size="sm" type="submit">
+                              Delete
+                            </Button>
+                          </form>
+                        </div>
                       </div>
                     );
                   })}
