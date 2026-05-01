@@ -76,9 +76,9 @@ export default function ProductCard({ product }: { product: ProductProp }) {
   return (
     <div className="w-full grid gap-3">
       <div>
-        <label className="text-sm font-medium block mb-1">Material</label>
+        <label className="text-sm font-medium block mb-1 text-[#166674] dark:text-[#96e7ee]">Material</label>
         <Select value={material} onValueChange={setMaterial}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full border-[#bff1f5] dark:border-[#1c7f90]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -91,14 +91,14 @@ export default function ProductCard({ product }: { product: ProductProp }) {
         </Select>
       </div>
       <div>
-        <div className="text-xs text-muted-foreground">Price</div>
-        <div className="text-lg font-semibold">{priceDisplay}</div>
+        <div className="text-xs text-[#1c7f90] dark:text-[#96e7ee]/70">Price</div>
+        <div className="text-lg font-semibold text-[#0e414a] dark:text-[#dff8fb]">{priceDisplay}</div>
       </div>
 
-      <div className="ml-4 flex w-72 gap-2">
+      <div className="flex gap-2">
         <Button
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-[#239fb1] text-[#239fb1] hover:bg-[#effcfe] hover:text-[#166674] dark:border-[#37bfd0] dark:text-[#37bfd0] dark:hover:bg-[#12525d]"
           onClick={() => {
             if (!selectedVariant) return;
             addItem({
@@ -120,7 +120,7 @@ export default function ProductCard({ product }: { product: ProductProp }) {
         <Button
           onClick={handleBuyNow}
           disabled={!selectedVariant}
-          className="flex-1"
+          className="flex-1 bg-[#ff9f2f] text-white hover:bg-[#f18d1c] dark:bg-[#ffb13a] dark:text-[#0e414a] dark:hover:bg-[#ff9f2f]"
         >
           Buy Now
         </Button>

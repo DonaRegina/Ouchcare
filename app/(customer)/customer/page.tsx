@@ -117,7 +117,7 @@ export default async function CustomerDashboardPage() {
   return (
     <main className="mx-auto min-h-[calc(100vh-4rem)] w-full max-w-6xl px-6 py-10">
       <section className="w-full space-y-8">
-        <div className="rounded-[2rem] border border-[#bff1f5] bg-gradient-to-br from-white via-[#fff6e7]/70 to-[#effcfe]/70 p-8 shadow-[0_24px_80px_rgba(15,23,42,0.1)]">
+        <div className="rounded-[2rem] border border-[#bff1f5] bg-gradient-to-br from-white via-[#fff6e7]/70 to-[#effcfe]/70 dark:border-[#1c7f90] dark:from-[#0e414a] dark:via-[#12525d] dark:to-[#0e414a] p-8 shadow-[0_24px_80px_rgba(15,23,42,0.1)]">
           <Badge className="rounded-full bg-[#239fb1] px-4 py-1 text-white">
             Customer workspace
           </Badge>
@@ -134,7 +134,7 @@ export default async function CustomerDashboardPage() {
                 together after sign in.
               </p>
             </div>
-            <div className="rounded-3xl border border-black/5 bg-white/85 p-5 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/5 bg-white/85 p-5 dark:border-white/10 dark:bg-[#12525d] shadow-sm backdrop-blur">
               <p className="text-sm font-medium text-[#239fb1]">
                 Recommended next step
               </p>
@@ -148,13 +148,13 @@ export default async function CustomerDashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
           {/* Orders section */}
-          <Card className="border-[#dff8fb] bg-white/90">
+          <Card className="flex flex-col border-[#dff8fb] bg-white/90 dark:border-[#1c7f90] dark:bg-[#0e414a]">
             <CardHeader className="flex items-start justify-between gap-4">
               <div>
                 <CardTitle className="text-[#ff9f2f]">Recent Orders</CardTitle>
-                <p className="text-sm text-slate-600">Your last purchases</p>
+                <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">Your last purchases</p>
               </div>
               <div className="flex items-center gap-3">
                 <Link
@@ -165,19 +165,19 @@ export default async function CustomerDashboardPage() {
                 </Link>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex-1 space-y-4">
               {orders.length > 0 ? (
                 orders.map((order) => (
                   <div
                     key={order.id}
-                    className="rounded-xl border border-black/10 p-4"
+                    className="rounded-xl border border-black/10 p-4 dark:border-white/10"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <p className="text-sm font-semibold text-slate-900">
+                        <p className="text-sm font-semibold text-slate-900 dark:text-[#dff8fb]">
                           Order {order.id.slice(0, 8)}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-slate-500 dark:text-[#96e7ee]/60">
                           {new Date(order.created_at).toLocaleString()}
                         </p>
                       </div>
@@ -185,12 +185,12 @@ export default async function CustomerDashboardPage() {
                         <Badge variant="outline" className="capitalize">
                           {order.status}
                         </Badge>
-                        <span className="text-sm font-semibold text-slate-900">
+                        <span className="text-sm font-semibold text-slate-900 dark:text-[#dff8fb]">
                           {CURRENCY.format(order.total_huf)}
                         </span>
                       </div>
                     </div>
-                    <ul className="mt-3 space-y-1 text-sm text-slate-600">
+                    <ul className="mt-3 space-y-1 text-sm text-slate-600 dark:text-[#96e7ee]/80">
                       {(itemsByOrder.get(order.id) ?? []).map((item) => (
                         <li key={`${order.id}-${item.productName}`}>
                           {item.productName} x {item.quantity} (
@@ -201,7 +201,7 @@ export default async function CustomerDashboardPage() {
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
                   No recent orders. Complete a purchase to see it here.
                 </p>
               )}
@@ -209,11 +209,11 @@ export default async function CustomerDashboardPage() {
           </Card>
 
           {/* Measurements section */}
-          <Card className="border-[#dff8fb] bg-white/90">
+          <Card className="flex flex-col border-[#dff8fb] bg-white/90 dark:border-[#1c7f90] dark:bg-[#0e414a]">
             <CardHeader className="flex items-start justify-between gap-4">
               <div>
                 <CardTitle className="text-[#239fb1]">Measurements</CardTitle>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
                   Your saved pet measurements
                 </p>
               </div>
@@ -224,7 +224,7 @@ export default async function CustomerDashboardPage() {
                 View all
               </Link>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex-1 space-y-4">
               {measurements.length > 0 ? (
                 <div className="grid gap-3">
                   {measurements.map((m) => {
@@ -239,13 +239,13 @@ export default async function CustomerDashboardPage() {
                     return (
                       <div
                         key={m.id}
-                        className="flex items-center justify-between rounded-xl border border-black/10 p-4"
+                        className="flex items-center justify-between rounded-xl border border-black/10 p-4 dark:border-white/10"
                       >
                         <div>
-                          <p className="text-sm font-semibold text-slate-900">
+                          <p className="text-sm font-semibold text-slate-900 dark:text-[#dff8fb]">
                             {m.pet_name}
                           </p>
-                          <p className="text-xs text-slate-500">{date}</p>
+                          <p className="text-xs text-slate-500 dark:text-[#96e7ee]/60">{date}</p>
                         </div>
                         <form action={deleteMeasurementAction}>
                           <input type="hidden" name="id" value={m.id} />
@@ -259,7 +259,7 @@ export default async function CustomerDashboardPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
                     You don't have any saved measurements yet.
                   </p>
                   <Button asChild variant="outline" className="w-full">
@@ -278,21 +278,21 @@ export default async function CustomerDashboardPage() {
           <Button
             asChild
             variant="outline"
-            className="rounded-full border-black/10 bg-white/80 px-5"
+            className="rounded-full border-black/10 bg-white/80 px-5 dark:border-white/10 dark:bg-[#12525d]"
           >
             <Link href="/shop">Browse products</Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="rounded-full border-black/10 bg-white/80 px-5"
+            className="rounded-full border-black/10 bg-white/80 px-5 dark:border-white/10 dark:bg-[#12525d]"
           >
             <Link href="/measurement-wizard">Measure my pet</Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="rounded-full border-black/10 bg-white/80 px-5"
+            className="rounded-full border-black/10 bg-white/80 px-5 dark:border-white/10 dark:bg-[#12525d]"
           >
             <Link href="/checkout">Continue checkout</Link>
           </Button>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,13 +23,17 @@ export default function CartDrawer() {
   const items = useCartStore((s) => s.items);
   const removeItem = useCartStore((s) => s.removeItem);
   const totalHuf = useCartStore((s) => s.totalHuf());
+  const [open, setOpen] = useState(false);
+
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleCheckout = () => {
+    setOpen(false);
     router.push("/checkout");
   };
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
           variant="ghost"
@@ -36,9 +41,9 @@ export default function CartDrawer() {
           aria-label="Open cart"
         >
           <ShoppingCart className="h-5 w-5" />
-          {items.length > 0 && (
-            <span className="pointer-events-none absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
-              {items.length}
+          {totalQuantity > 0 && (
+            <span className="pointer-events-none absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full bg-[#239fb1] px-2 py-0.5 text-xs font-semibold text-white">
+              {totalQuantity}
             </span>
           )}
         </Button>
@@ -49,7 +54,7 @@ export default function CartDrawer() {
           <SheetTitle>Cart</SheetTitle>
         </SheetHeader>
 
-        <div className="mt-2 space-y-4">
+        <div className="mt-2 space-y-4 px-4">
           {items.length === 0 ? (
             <div className="py-8 text-center">
               <p className="mb-3 text-sm text-muted-foreground">
@@ -57,7 +62,8 @@ export default function CartDrawer() {
               </p>
               <Link
                 href="/shop"
-                className="text-sm font-medium text-emerald-600 hover:underline"
+                className="text-sm font-medium text-[#239fb1] hover:underline"
+                onClick={() => setOpen(false)}
               >
                 Browse shop
               </Link>
@@ -67,7 +73,7 @@ export default function CartDrawer() {
               {items.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-start justify-between gap-3 rounded-md border p-3"
+                  className="flex items-start justify-between gap-3 rounded-md border border-[#bff1f5] p-3"
                 >
                   <div className="min-w-0">
                     <p className="font-medium break-words">{item.name}</p>
@@ -96,7 +102,7 @@ export default function CartDrawer() {
           )}
         </div>
 
-        <SheetFooter>
+        <SheetFooter className="px-4">
           <div className="w-full space-y-3">
             <div className="flex items-center justify-between rounded-md border bg-muted/30 p-4">
               <span className="font-medium">Total</span>
@@ -106,7 +112,7 @@ export default function CartDrawer() {
             </div>
 
             <Button
-              className="w-full min-h-11"
+              className="w-full min-h-11 bg-[#239fb1] text-white hover:bg-[#1c7f90]"
               onClick={handleCheckout}
               disabled={items.length === 0}
             >

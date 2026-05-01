@@ -51,7 +51,28 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: context.error.message }, { status: context.error.status });
   }
 
-  const payload = adminProductUpdateSchema.safeParse(await request.json().catch(() => null));
+  const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
+
+  if (!body) {
+    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  }
+
+  // Handle variant stock update
+  if (typeof body.variantId === "string" && typeof body.stock === "number") {
+    const { error } = await context.client
+      .from("product_variants")
+      .update({ stock: Math.max(0, Math.round(body.stock)) })
+      .eq("id", body.variantId);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ ok: true });
+  }
+
+  // Handle product update
+  const payload = adminProductUpdateSchema.safeParse(body);
 
   if (!payload.success) {
     return NextResponse.json({ error: "Invalid product payload.", issues: payload.error.flatten() }, { status: 400 });

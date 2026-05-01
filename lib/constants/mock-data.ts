@@ -5,6 +5,8 @@ export const APP_NAME = "OUCHCare";
 export const CURRENCY = new Intl.NumberFormat("hu-HU", {
   style: "currency",
   currency: "HUF",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
 });
 
 export const WIZARD_FIELDS: WizardField[] = [

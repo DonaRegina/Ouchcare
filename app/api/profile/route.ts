@@ -6,10 +6,12 @@ import { getRoleFromUser } from "@/lib/supabase/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 function getPublicProfileRole(role: unknown) {
-  const parsedRole = publicUserRoleSchema.safeParse(role);
-
-  return parsedRole.success ? parsedRole.data : null;
+  if (role === "admin" || role === "vet" || role === "customer") {
+    return role;
+  }
+  return null;
 }
+
 
 export async function GET() {
   const supabase = await createServerSupabaseClient();

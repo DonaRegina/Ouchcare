@@ -29,20 +29,20 @@ export default async function ShopPage() {
 
   return (
     <section className="space-y-6">
-      <h1 className="text-3xl font-semibold tracking-tight">
+      <h1 className="text-3xl font-semibold tracking-tight text-[#0e414a] dark:text-[#96e7ee]">
         Shop post-operative wear
       </h1>
-      <p className="text-muted-foreground max-w-2xl">
+      <p className="max-w-2xl text-[#166674] dark:text-[#96e7ee]/80">
         Choose a standard size or begin with custom measurements for precise
         recovery coverage.
       </p>
       {!products || products.length === 0 ? (
-        <p className="text-muted-foreground rounded-md border border-dashed p-6 text-sm">
+        <p className="rounded-md border border-dashed border-[#bff1f5] p-6 text-sm text-[#1c7f90]">
           No active products found in Supabase. Seed the catalog and mark
           products as active to show them here.
         </p>
       ) : null}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {(products ?? []).map((product: any) => {
           const variants = (product.product_variants ?? []) as Array<{
             id: string;
@@ -52,7 +52,7 @@ export default async function ShopPage() {
           }>;
 
           return (
-            <Card key={product.id} className="h-full overflow-hidden">
+            <Card key={product.id} className="h-full overflow-hidden border-[#bff1f5] bg-white shadow-sm dark:border-[#1c7f90] dark:bg-[#0e414a]">
               <div className="relative aspect-[4/3] w-full">
                 <Image
                   src={product.hero_image_url}
@@ -63,8 +63,8 @@ export default async function ShopPage() {
                 />
               </div>
               <CardHeader>
-                <CardTitle>{product.name}</CardTitle>
-                <CardDescription className="line-clamp-3">
+                <CardTitle className="text-[#0e414a] dark:text-[#dff8fb]">{product.name}</CardTitle>
+                <CardDescription className="line-clamp-3 text-[#1c7f90] dark:text-[#96e7ee]/70">
                   {product.description}
                 </CardDescription>
               </CardHeader>

@@ -643,7 +643,7 @@ export function MeasurementWizard() {
 
   if (isLoading) {
     return (
-      <Card className="mx-auto w-full max-w-6xl border-black/5 bg-white/95 shadow-[0_20px_70px_rgba(15,23,42,0.12)]">
+      <Card className="mx-auto w-full max-w-6xl border-black/5 bg-white/95 shadow-[0_20px_70px_rgba(15,23,42,0.12)] dark:border-white/10 dark:bg-[#0e414a]/95">
         <CardContent className="flex items-center justify-center gap-3 py-20 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" />
           Loading saved measurements...
@@ -653,7 +653,7 @@ export function MeasurementWizard() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-6xl overflow-hidden border-black/5 bg-white/95 shadow-[0_24px_80px_rgba(15,23,42,0.12)]">
+    <Card className="mx-auto w-full max-w-6xl overflow-hidden border-black/5 bg-white/95 shadow-[0_24px_80px_rgba(15,23,42,0.12)] dark:border-white/10 dark:bg-[#0e414a]/95">
       <CardHeader className="border-b bg-[radial-gradient(circle_at_top_left,_rgba(249,115,22,0.18),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.18),_transparent_32%),linear-gradient(135deg,_#0f172a_0%,_#111827_56%,_#1f2937_100%)] text-white">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-4">
@@ -711,14 +711,14 @@ export function MeasurementWizard() {
                   key={step.title}
                   type="button"
                   onClick={() => {
-                    if (stepIndex <= activeStep) {
+                    if (stepIndex <= activeStep && !savedAt) {
                       setActiveStep(stepIndex);
                     }
                   }}
                   aria-current={active ? "step" : undefined}
                   className={`inline-flex min-w-[8.5rem] items-center gap-2 rounded-full border px-3 py-2 text-left text-sm transition ${
                     active
-                      ? "border-white/30 bg-white text-slate-950 shadow-sm"
+                      ? "border-white/30 bg-white text-slate-950 dark:text-[#dff8fb] shadow-sm"
                       : complete
                         ? "border-white/20 bg-white/10 text-white hover:bg-white/15"
                         : "border-white/10 bg-white/5 text-slate-300"
@@ -742,14 +742,14 @@ export function MeasurementWizard() {
         {savedAt ? (
           <section className="col-span-full flex flex-col items-center justify-center gap-8 py-16">
             <div className="flex flex-col items-center gap-6 text-center">
-              <div className="rounded-full bg-emerald-50 p-4">
-                <CheckCircle2 className="h-12 w-12 text-emerald-600" />
+              <div className="rounded-full bg-emerald-50 p-4 dark:bg-emerald-900/30">
+                <CheckCircle2 className="h-12 w-12 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="space-y-3">
-                <h2 className="text-3xl font-semibold text-slate-950">
+                <h2 className="text-3xl font-semibold text-slate-950 dark:text-[#dff8fb]">
                   Measurements saved successfully!
                 </h2>
-                <p className="max-w-md text-lg text-slate-600">
+                <p className="max-w-md text-lg text-slate-600 dark:text-[#96e7ee]/80">
                   {intro.petName || "Your pet"}'s fit profile is now saved to
                   your account and ready for use.
                 </p>
@@ -812,7 +812,7 @@ export function MeasurementWizard() {
           <>
             <section className="space-y-6">
               {activeStep === 0 ? (
-                <Card className="border-black/5 bg-slate-50/90 shadow-none">
+                <Card className="border-black/5 bg-slate-50/90 shadow-none dark:border-white/10 dark:bg-[#0e414a]/90">
                   <CardHeader className="space-y-2">
                     <Badge variant="secondary" className="w-fit">
                       Step 1
@@ -918,11 +918,11 @@ export function MeasurementWizard() {
                           you enter next.
                         </p>
                       </div>
-                      <div className="rounded-2xl bg-slate-950 p-4 text-white">
-                        <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+                      <div className="rounded-2xl bg-[#166674] p-4 text-white">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#96e7ee]">
                           Quick reminder
                         </p>
-                        <p className="mt-2 text-sm leading-6 text-slate-200">
+                        <p className="mt-2 text-sm leading-6 text-[#dff8fb]">
                           Keep the tape level, do not compress the fur, and
                           measure in centimeters for the most reliable result.
                         </p>
@@ -931,8 +931,8 @@ export function MeasurementWizard() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="overflow-hidden border-black/5 bg-slate-50/90 shadow-none">
-                  <CardHeader className="space-y-2 border-b bg-white/80">
+                <Card className="overflow-hidden border-black/5 bg-slate-50/90 shadow-none dark:border-white/10 dark:bg-[#0e414a]/90 dark:border-white/10 dark:bg-[#0e414a]/90">
+                  <CardHeader className="space-y-2 border-b bg-white/80 dark:bg-[#12525d]/80 dark:border-white/10">
                     <Badge variant="secondary" className="w-fit">
                       Step {activeStep + 1}
                     </Badge>
@@ -947,7 +947,7 @@ export function MeasurementWizard() {
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           How to measure
                         </p>
-                        <ol className="space-y-3 text-sm leading-6 text-slate-700">
+                        <ol className="space-y-3 text-sm leading-6 text-slate-700 dark:text-[#96e7ee]">
                           {currentStepDefinition?.instructions.map(
                             (instruction, instructionIndex) => (
                               <li key={instruction} className="flex gap-3">
@@ -975,7 +975,7 @@ export function MeasurementWizard() {
                           height={540}
                           className="aspect-video w-full object-cover"
                         />
-                        <figcaption className="space-y-1 p-4 text-sm text-slate-600">
+                        <figcaption className="space-y-1 p-4 text-sm text-slate-600 dark:text-[#96e7ee]/80">
                           <p className="font-medium text-slate-900">
                             Illustrated reference
                           </p>
@@ -1076,7 +1076,7 @@ export function MeasurementWizard() {
                                 <Upload className="h-4 w-4" />
                                 Upload a reference photo
                               </span>
-                              <span className="text-sm leading-6 text-slate-600">
+                              <span className="text-sm leading-6 text-slate-600 dark:text-[#96e7ee]/80">
                                 Add a front or side photo for later
                                 photo-analysis features. This is optional.
                               </span>
@@ -1109,7 +1109,7 @@ export function MeasurementWizard() {
                                 />
                               </div>
                             ) : (
-                              <div className="rounded-2xl border border-black/5 bg-slate-50 p-4 text-sm text-slate-600">
+                              <div className="rounded-2xl border border-black/5 bg-slate-50 p-4 text-sm text-slate-600 dark:text-[#96e7ee]/80">
                                 No photo selected yet.
                               </div>
                             )}
@@ -1123,7 +1123,7 @@ export function MeasurementWizard() {
             </section>
 
             <aside className="space-y-6">
-              <Card className="border-black/5 bg-slate-50/90 shadow-none">
+              <Card className="border-black/5 bg-slate-50/90 shadow-none dark:border-white/10 dark:bg-[#0e414a]/90">
                 <CardHeader className="space-y-2">
                   <CardTitle className="text-xl">Review summary</CardTitle>
                   <CardDescription>
@@ -1132,33 +1132,33 @@ export function MeasurementWizard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="rounded-2xl border border-black/5 bg-white p-4">
+                  <div className="rounded-2xl border border-black/5 bg-white p-4 dark:border-white/10 dark:bg-[#12525d]">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       Pet details
                     </p>
                     <div className="mt-3 grid gap-2 text-sm">
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-muted-foreground">Name</span>
-                        <span className="font-medium text-slate-950">
+                        <span className="font-medium text-slate-950 dark:text-[#dff8fb]">
                           {intro.petName || "Not set"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-muted-foreground">Species</span>
-                        <span className="font-medium text-slate-950">
+                        <span className="font-medium text-slate-950 dark:text-[#dff8fb]">
                           {intro.species || "Not set"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-muted-foreground">Breed</span>
-                        <span className="font-medium text-slate-950">
+                        <span className="font-medium text-slate-950 dark:text-[#dff8fb]">
                           {intro.breed || "Not set"}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-black/5 bg-white p-4">
+                  <div className="rounded-2xl border border-black/5 bg-white p-4 dark:border-white/10 dark:bg-[#12525d]">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       Measurement snapshot
                     </p>
@@ -1171,7 +1171,7 @@ export function MeasurementWizard() {
                           <span className="text-muted-foreground">
                             {step.title}
                           </span>
-                          <span className="font-medium text-slate-950">
+                          <span className="font-medium text-slate-950 dark:text-[#dff8fb]">
                             {formatMeasurement(step.value)}
                           </span>
                         </div>
@@ -1179,7 +1179,7 @@ export function MeasurementWizard() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-black/5 bg-white p-4">
+                  <div className="rounded-2xl border border-black/5 bg-white p-4 dark:border-white/10 dark:bg-[#12525d]">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       Size guidance
                     </p>
@@ -1187,7 +1187,7 @@ export function MeasurementWizard() {
                       <Badge className="bg-slate-950 px-3 py-1 text-white hover:bg-slate-900">
                         {breedSuggestion.size}
                       </Badge>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-600 dark:text-[#96e7ee]/80">
                         {breedSuggestion.note}
                       </p>
                     </div>
@@ -1226,7 +1226,7 @@ export function MeasurementWizard() {
                     These reminders help keep the fit comfortable and practical.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm leading-6 text-slate-600">
+                <CardContent className="space-y-3 text-sm leading-6 text-slate-600 dark:text-[#96e7ee]/80">
                   <p>
                     Measure while your pet is relaxed and standing straight on a
                     flat surface.
